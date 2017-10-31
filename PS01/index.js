@@ -20,6 +20,7 @@ var svg2 = d3.select('#svg2')
 //these are the size that the axes will be on the screen; set the domain values after the data loads.
 var scaleX = d3.scaleBand().rangeRound([0, width-2*marginLeft]).padding(0.3);
 var scaleY = d3.scaleLinear().range([height-2*marginTop, 0]);
+var scaleY2 = d3.scaleLinear().range([height-2*marginTop, 0]);
 
 //import the data from the .csv file
 d3.csv('./dataFinal.csv', function(dataIn){
@@ -69,6 +70,7 @@ d3.csv('./dataFinal.csv', function(dataIn){
         .attr('font-size','14');
 
 ///
+    scaleY2.domain([1930, d3.max(loadData.map(function(d){return +d.dataRec}))]);
 
     svg2.append("g")
         .attr('class','xaxis')
@@ -80,7 +82,7 @@ d3.csv('./dataFinal.csv', function(dataIn){
 
     svg2.append("g")
         .attr('class', 'yaxis')
-        .call(d3.axisLeft(scaleY))
+        .call(d3.axisLeft(scaleY2))
         .style('stroke','green')
         .style('line-color','white')
         .style('fill','green');
@@ -125,7 +127,7 @@ function drawPoints(pointData){
         .call(d3.axisBottom(scaleX));
 
     d3.selectAll('.yaxis')
-        .call(d3.axisLeft(scaleY));
+        .call(d3.axisLeft(scaleY2));
 
     //select all bars in SVG1, and bind them to the new data
     var rects = svg.selectAll('.bars')
@@ -187,13 +189,13 @@ function drawPoints(pointData){
             return scaleX(d.state);
         })
         .attr('y',function(d){
-            return scaleY(d.dataMed);
+            return scaleY2(d.dataMed);
         })
         .attr('width',function(d){
             return scaleX.bandwidth();
         })
         .attr('height',function(d){
-            return height-2*marginTop - scaleY(d.dataMed);  //400 is the beginning domain value of the y axis, set above
+            return height-2*marginTop - scaleY2(d.dataMed);  //400 is the beginning domain value of the y axis, set above
         });
 
     //add the enter() function to make bars for any new countries in the list, and set their properties
@@ -206,13 +208,13 @@ function drawPoints(pointData){
             return scaleX(d.state);
         })
         .attr('y',function(d){
-            return scaleY(d.dataMed);
+            return scaleY2(d.dataMed);
         })
         .attr('width',function(d){
             return scaleX.bandwidth();
         })
         .attr('height',function(d){
-            return height-2*marginTop - scaleY(d.dataMed);  //400 is the beginning domain value of the y axis, set above
+            return height-2*marginTop - scaleY2(d.dataMed);  //400 is the beginning domain value of the y axis, set above
         });
 
 
